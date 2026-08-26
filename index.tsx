@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, ScrollView } from 'react-native';
-import { createMMKV } from 'react-native-mmkv-storage';
+import createMMKV from 'react-native-mmkv-storage';
 import { useState } from 'react';
 import TodoItem from './TodoItem';
 
@@ -7,7 +7,7 @@ const storage = createMMKV({
     id: 'todoStorage'
 });
 
-useRef()
+
 
 export type TodoItem = {
     id: string;
@@ -16,7 +16,7 @@ export type TodoItem = {
     priority: number;
 };
 
-export default function App() {
+export default function HomeScreen() {
     const [todos, setTodos] = useState<TodoItem[]>([]);
     setTodos(JSON.parse(storage.getString('todos')) || []);
 
