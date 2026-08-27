@@ -1,4 +1,4 @@
-import FontAwesome from '@expo/vector-icons/FontAwesome';
+import FontAwesome from '@react-native-vector-icons/fontawesome';
 import { Tabs } from 'expo-router';
 
 export default function TabLayout() {
