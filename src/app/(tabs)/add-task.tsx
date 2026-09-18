@@ -9,6 +9,7 @@ import {
   TextInput,
   View
 } from 'react-native';
+import { Calendar } from 'react-native-calendars';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 type Complexity = 'Simple' | 'Moderate' | 'Complex';
@@ -96,7 +97,7 @@ export default function AddTaskScreen() {
             ]}
             value={title}
             onChangeText={setTitle}
-            placeholder="Enter task title"
+            placeholder="What do you need done?"
             placeholderTextColor="#999"
           />
 
@@ -111,16 +112,10 @@ export default function AddTaskScreen() {
             Date <ThemedText style={styles.required}>*</ThemedText>
           </ThemedText>
 
-          <TextInput
-            style={[
-              styles.input,
-              errors.date && styles.inputError,
-            ]}
-            value={date}
-            onChangeText={setDate}
-            placeholder="YYYY-MM-DD"
-            placeholderTextColor="#999"
-            keyboardType="numbers-and-punctuation"
+          <Calendar
+            onDayPress={day => setDate(day.dateString)}
+            markedDates={{[date]: { selected: true, selectedColor: '#00adf5' }}}
+            style={{ borderRadius: 20, paddingBottom: 20}}
           />
 
           {errors.date && (
@@ -156,6 +151,8 @@ export default function AddTaskScreen() {
             </View>
 
             <Switch
+              trackColor={{false: '#767577', true: '#81b0ff'}}
+              thumbColor={urgent ? '#f5dd4b' : '#f4f3f4'}
               value={urgent}
               onValueChange={setUrgent}
             />
