@@ -1,30 +1,22 @@
 import { StyleSheet } from 'react-native';
 
-import { Complexity, complexityOrder, Task } from '@/app/(tabs)/index';
 import TaskItem from '@/components/task-item';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { Complexity, Task } from '@/constants/types';
 
 const complexityColors: Record<Complexity, string> = {
-    simple: '#F0F7ED',
-    moderate: '#F8F5E8',
-    complex: '#FCEEEE',
-};
-
-const complexityBorderColors: Record<Complexity, string> = {
-    simple: '#245C24',
-    moderate: '#5A4700',
-    complex: '#7A1F1F',
+    'simple': '#2DD4BF',
+    'moderate': '#F59E0B',
+    'complex': '#8B5CF6',
 };
 
 function capitalize(str: string) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-export default function GeneralTasks({ tasks, complexity, toggleTask }: { tasks: Task[]; complexity: Complexity; toggleTask: (id: number) => void }) {
-    const filteredTasks = tasks.filter((task) => task.complexity === complexity);
-
-    const totalEstimatedTime = filteredTasks.reduce((total, task) => total + task.estimatedMinutes, 0);
+export default function GeneralTasks({ tasks, complexity, complexityOrder, toggleTask }: { tasks: Task[]; complexity: Complexity; complexityOrder: Complexity[]; toggleTask: (id: number) => void }) {
+    const filteredTasks = tasks.filter((task) => task.complexity === complexity && !task.urgent);
 
     const isComplexityUnlocked = (complexity: Complexity) => {
         const index = complexityOrder.indexOf(complexity);
@@ -36,32 +28,61 @@ export default function GeneralTasks({ tasks, complexity, toggleTask }: { tasks:
         const previousComplexity = complexityOrder[index - 1];
 
         const previousTasks = tasks.filter(
-        (task) => task.complexity === previousComplexity
+        (task) => task.complexity === previousComplexity && !task.urgent
         );
 
-        return (
-        previousTasks.length > 0 &&
-        previousTasks.every((task) => task.completed)
-        );
+        return (previousTasks.length > 0 && previousTasks.every((task) => task.completed));
     };
+
+    const calculateTime = (mins: number): string => {
+        if (mins < 60) {
+            return `${mins}m`
+        };
+
+        const h = Math.floor(mins / 60);
+        const m = mins % 60;
+        
+        return m ? `${h}h ${m}m` : `${h}h`;
+        }
+
+    const totalEstimatedTime = calculateTime(filteredTasks.reduce((total, task) => total + task.estimatedMinutes, 0));
 
     return ( 
         <ThemedView style={[
             styles.container, 
-            isComplexityUnlocked(complexity) && {
-                backgroundColor: complexityColors[complexity], 
-                borderColor: complexityBorderColors[complexity],
-                opacity: 1
-            }]}>
+            isComplexityUnlocked(complexity) ? 
+            {
+                backgroundColor: complexityColors[complexity] + '1a',
+                borderColor: '#F1F5F9'
+            } :
+            {
+                backgroundColor: complexityColors[complexity] + '0A',
+                borderColor: '#F1F5F915'
+            }
+            ]}>
             <ThemedView style={styles.headerContainer}>
-                <ThemedText style={styles.header}>{capitalize(complexity)} Tasks</ThemedText>
-                <ThemedText style={styles.tag}>{totalEstimatedTime} min</ThemedText>
+                <ThemedText style={[styles.header,
+                    isComplexityUnlocked(complexity) ? {color: complexityColors[complexity]} : {color: complexityColors[complexity] + '25'}
+                ]}>{capitalize(complexity)}</ThemedText>
+                <ThemedText style={[styles.tag,
+                    isComplexityUnlocked(complexity) ?
+                    {
+                        color: complexityColors[complexity],
+                        backgroundColor: complexityColors[complexity] + '40',
+                        borderColor: '#2DD4BF1F'
+                    } :
+                    {
+                        color: complexityColors[complexity] + '25',
+                        backgroundColor: complexityColors[complexity] + '1f',
+                        borderColor: '#F1F5F91F'
+                    }
+                ]}>{totalEstimatedTime} total</ThemedText>
             </ThemedView>
             <ThemedView style={styles.tasksContainer}>
                 {filteredTasks.sort(
                     (a, b) => a.estimatedMinutes - b.estimatedMinutes
                 ).map(
-                    (task) => (<TaskItem key={task.id} task={task} toggleTask={toggleTask} />)
+                    (task) => (<TaskItem key={task.id} task={task} unlock={isComplexityUnlocked(complexity)} toggleTask={toggleTask} />)
                 ) || <ThemedText style={{ fontStyle: 'italic', color: 'grey' }}>No tasks available</ThemedText>}
             </ThemedView>
         </ThemedView>
@@ -70,82 +91,55 @@ export default function GeneralTasks({ tasks, complexity, toggleTask }: { tasks:
 
 const styles = StyleSheet.create({
     container: {
+        display: 'flex',
+        padding: 16,
+        flexDirection: 'column',
+        justifyContent: 'flex-start',
+        alignSelf: 'stretch',
+        borderRadius: 16,
+        borderWidth: 1.317,
+
         marginBottom: 16,
-        padding: 18,
-
-        // Modern card shape
-        borderRadius: 18,
-        borderWidth: 1.5,
-        borderColor: '#4A4A4A',
-
-        // Default surface
-        backgroundColor: '#FFFFFF',
-
-        // Subtle card shadow
-        shadowColor: '#000000',
-        shadowOffset: {
-            width: 0,
-            height: 4,
-        },
-        shadowOpacity: 0.14,
-        shadowRadius: 10,
-
-        // Android shadow
-        elevation: 5,
-        opacity: 0.55
     },
 
     headerContainer: {
+        display: 'flex',
         flexDirection: 'row',
-        alignItems: 'center',
         justifyContent: 'space-between',
-
-        marginBottom: 14,
-        paddingBottom: 12,
-
-        // Creates a subtle visual separation between
-        // the card header and its task list.
-        borderBottomWidth: 1,
-        borderBottomColor: '#6B6B6B',
-
+        alignItems: 'center',
+        alignSelf: 'stretch',
         backgroundColor: 'transparent',
     },
 
     header: {
-        fontSize: 19,
-        fontWeight: '700',
-
-        // Very dark text provides strong contrast
-        // against the light card backgrounds.
-        color: '#171717',
-
-        letterSpacing: 0.2,
+        // fontFamily: 'Outfit',
+        fontSize: 13,
+        fontWeight: 600,
+        lineHeight: 19.5, /* 150% */
+        letterSpacing: 0.78,
+        textTransform: 'uppercase',
     },
 
     tag: {
-        fontSize: 12,
-        fontWeight: '700',
-
-        // High-contrast text
-        color: '#171717',
-
-        // Pill shape
-        paddingHorizontal: 10,
-        paddingVertical: 5,
-        borderRadius: 999,
-
-        // Light surface with a clearly defined boundary
-        backgroundColor: '#FFFFFF',
-        borderWidth: 1.5,
-        borderColor: '#3D3D3D',
-
-        overflow: 'hidden',
+        display: 'flex',
+        paddingHorizontal: 8,
+        flexDirection: 'column',
+        borderRadius: 100,
+        borderWidth: 1.317,
+        borderColor: '#f43f5e33',
+        backgroundColor: '#f43f5e1a',
+        color: '#f43f5e',
+        fontFamily: 'Inter',
+        fontSize: 10,
+        fontStyle: 'normal',
+        fontWeight: 600,
     },
 
     tasksContainer: {
         paddingLeft: 4,
         paddingTop: 2,
-
+        gap: 8,
+        flexDirection: 'column',
+        justifyContent: 'flex-start',
         backgroundColor: 'transparent',
-    },
-});
+    },});
