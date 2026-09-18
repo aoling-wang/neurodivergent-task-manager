@@ -1,4 +1,4 @@
-import { eachDayOfInterval, endOfISOWeek, format, startOfISOWeek } from 'date-fns';
+import { addDays, eachDayOfInterval, endOfISOWeek, format, startOfISOWeek } from 'date-fns';
 import { FlatList, StyleSheet } from 'react-native';
 
 import PriorityTaskCard from '@/components/task-container/date';
@@ -12,19 +12,19 @@ export default function WeekScreen() {
 
     const getFormattedWeekDays = () => {
         const today = new Date();
-        const days = eachDayOfInterval({ start: startOfISOWeek(today), end: endOfISOWeek(today) });
+        const days = eachDayOfInterval({ start: startOfISOWeek(today), end: addDays(endOfISOWeek(today), 2) });
         return days.map(day => format(day, 'yyyy-MM-dd'));
     };
 
   return (
     <SafeAreaView style={styles.safeArea}>
         <ThemedView style={styles.container}>
-            <ThemedText style={styles.header}>
-                Weekly Tasks
-            </ThemedText>
-            <ThemedText style={styles.subheader}>
-                {format(startOfISOWeek(new Date()), 'yyyy-MM-dd')} - {format(endOfISOWeek(new Date()), 'yyyy-MM-dd')}
-            </ThemedText>
+            <ThemedView style={styles.headerContainer}>
+                <ThemedText style={styles.header}>Weekly Tasks</ThemedText>
+                <ThemedText style={styles.subheader}>
+                    {format(startOfISOWeek(new Date()), 'yyyy-MM-dd')} - {format(endOfISOWeek(new Date()), 'yyyy-MM-dd')}
+                </ThemedText>
+            </ThemedView>
             <FlatList
                 data={getFormattedWeekDays()}
                 numColumns={3}
@@ -44,27 +44,47 @@ export default function WeekScreen() {
 }
 
 const styles = StyleSheet.create({
+    safeArea: {
+        flex: 1, 
+        backgroundColor: 'black',
+        paddingHorizontal: 20,
+    },
+    
     container: {
         flex: 1,
+        backgroundColor: 'black',
+    },
+
+    headerContainer: {
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        gap: 4,
+        backgroundColor: 'transparent',
+        marginVertical: 24,
+    },
+
+    textContainer: {
+        flexDirection: 'column',
+        gap: 4,
         backgroundColor: 'transparent'
     },
 
-    safeArea: {
-        flex: 1,
-        padding: 16,
-    },
-
     header: {
+        color: '#F1F5F9',
+        // fontFamily: 'Outfit',
         fontSize: 28,
-        fontWeight: '700',
-        color: '#1C1C1E',
-        marginVertical: 6,
+        fontWeight: 700,
+        lineHeight: 33.6, /* 120% */
+        letterSpacing: -0.56,
     },
-
+        
     subheader: {
-        fontSize: 16,
-        color: '#6E6E73',
-        marginBottom: 16,
+        color: '#94A3B8',
+        // fontFamily: 'Inter',
+        fontSize: 13,   
+        fontStyle: 'normal',
+        fontWeight: 400,
+        lineHeight: 19.5, /* 150% */
     },
 
     grid: {
