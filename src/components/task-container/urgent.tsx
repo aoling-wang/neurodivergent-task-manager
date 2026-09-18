@@ -1,20 +1,33 @@
-import { Task } from '@/app/(tabs)/index';
 import TaskItem from '@/components/task-item';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { Task } from '@/constants/types';
 import { StyleSheet } from 'react-native';
 
 export default function UrgentTasks({ tasks, toggleTask }: { tasks: Task[]; toggleTask: (id: number) => void }) {
     const filteredTasks = tasks.filter((task) => task.urgent);
 
+    function calculateTime(mins: number): string {
+        if (mins < 60) {
+            return `${mins}m`
+        };
+
+        const h = Math.floor(mins / 60);
+        const m = mins % 60;
+        
+        return m ? `${h}h ${m}m` : `${h}h`;
+        }
+
+    const totalEstimatedTime = calculateTime(filteredTasks.reduce((total, task) => total + task.estimatedMinutes, 0));
+
     return (
         <ThemedView style={styles.container}>
             <ThemedView style={styles.headerContainer}>
-                <ThemedText style={styles.header}>Priority Tasks</ThemedText>
-                <ThemedText style={styles.tag}>Urgent</ThemedText>
+                <ThemedText style={styles.header}>Urgent</ThemedText>
+                <ThemedText style={styles.tag}>{totalEstimatedTime} total</ThemedText>
             </ThemedView>
             <ThemedView style={styles.tasksContainer}>
-                {filteredTasks.map((task) => (<TaskItem key={task.id} task={task} toggleTask={toggleTask} />))}
+                {filteredTasks.map((task) => (<TaskItem key={task.id} task={task} unlock={true} toggleTask={toggleTask} />))}
             </ThemedView>
         </ThemedView>
     );
@@ -22,81 +35,58 @@ export default function UrgentTasks({ tasks, toggleTask }: { tasks: Task[]; togg
 
 const styles = StyleSheet.create({
     container: {
-        marginBottom: 32,
-        padding: 18,
-
-        // Modern card shape
-        borderRadius: 18,
-        borderWidth: 1.5,
-        borderColor: '#4A4A4A',
-
-        // Default surface
-        backgroundColor: '#FFFFFF',
-
-        // Subtle card shadow
-        shadowColor: '#000000',
-        shadowOffset: {
-            width: 0,
-            height: 4,
-        },
-        shadowOpacity: 0.14,
-        shadowRadius: 10,
-
-        // Android shadow
-        elevation: 5,
+        display: 'flex',
+        padding: 16,
+        flexDirection: 'column',
+        justifyContent: 'flex-start',
+        alignSelf: 'stretch',
+        borderRadius: 16,
+        borderWidth: 1.317,
+        borderColor: '#F1F5F9',
+        backgroundColor: '#f43f5e1a',
+        marginBottom: 16,
     },
 
     headerContainer: {
+        display: 'flex',
         flexDirection: 'row',
-        alignItems: 'center',
         justifyContent: 'space-between',
-
-        marginBottom: 14,
-        paddingBottom: 12,
-
-        // Creates a subtle visual separation between
-        // the card header and its task list.
-        borderBottomWidth: 1,
-        borderBottomColor: '#6B6B6B',
-
+        alignItems: 'center',
+        alignSelf: 'stretch',
         backgroundColor: 'transparent',
     },
 
     header: {
-        fontSize: 19,
-        fontWeight: '700',
-
-        // Very dark text provides strong contrast
-        // against the light card backgrounds.
-        color: '#171717',
-
-        letterSpacing: 0.2,
+        color: '#F43F5E',
+        // fontFamily: 'Outfit',
+        fontSize: 13,
+        fontWeight: 600,
+        lineHeight: 19.5, /* 150% */
+        letterSpacing: 0.78,
+        textTransform: 'uppercase',
     },
 
     tag: {
-        fontSize: 12,
-        fontWeight: '700',
-
-        // High-contrast text
-        color: '#171717',
-
-        // Pill shape
-        paddingHorizontal: 10,
-        paddingVertical: 5,
-        borderRadius: 999,
-
-        // Light surface with a clearly defined boundary
-        backgroundColor: '#FFFFFF',
-        borderWidth: 1.5,
-        borderColor: '#3D3D3D',
-
-        overflow: 'hidden',
+        display: 'flex',
+        paddingHorizontal: 8,
+        flexDirection: 'column',
+        borderRadius: 100,
+        borderWidth: 1.317,
+        borderColor: '#f43f5e33',
+        backgroundColor: '#f43f5e1a',
+        color: '#f43f5e',
+        fontFamily: 'Inter',
+        fontSize: 10,
+        fontStyle: 'normal',
+        fontWeight: 600,
     },
 
     tasksContainer: {
         paddingLeft: 4,
         paddingTop: 2,
-
+        gap: 8,
+        flexDirection: 'column',
+        justifyContent: 'flex-start',
         backgroundColor: 'transparent',
     },
 });
