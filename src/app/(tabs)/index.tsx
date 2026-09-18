@@ -1,30 +1,34 @@
+import { MaterialDesignIcons } from '@react-native-vector-icons/material-design-icons';
 import { useState } from "react";
-import { ScrollView, StyleSheet, Switch } from "react-native";
+import { ScrollView, StyleSheet, TouchableOpacity } from "react-native";
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import GeneralTasks from '@/components/task-container/complexity';
 import UrgentTasks from '@/components/task-container/urgent';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { complexityOrder, type Task } from '@/constants/types';
 
 import { TestTasks } from '@/test-data';
 
-export type Complexity = "simple" | "moderate" | "complex";
 
-export const complexityOrder: Complexity[] = ["simple", "moderate", "complex"];
 
-export type Task = {
-  id: number;
-  title: string;
-  date: string;
-  estimatedMinutes: number;
-  complexity: Complexity;
-  urgent: boolean;
-  completed: boolean;
-};
+function getGreeting(): string {
+  const hour = new Date().getHours();
+  if (hour < 12) {
+    return "Good Morning";
+  } 
+  if (hour < 17) {
+    return "Good Afternoon"
+  };
+  return "Good Evening";
+}
 
 export default function HomeScreen() {
   const [tasks, setTasks] = useState<Task[]>(TestTasks);
+  const [reverse, setReverse] = useState(false);
+
+  const displayedComplexityOrder = reverse ? [...complexityOrder].reverse() : complexityOrder;
 
   const toggleTask = (id: number) => {
     setTasks(tasks.map(
@@ -41,27 +45,17 @@ export default function HomeScreen() {
     // storage.set('tasksStorage', JSON.stringify(newTasks));
   };
 
-  const [reverse, setReverse] = useState(false);
-
-  const toggleReverse = () => {
-    setReverse((prev) => !prev);
-  }
-
   return (
     <ThemedView style={styles.container}>
       <SafeAreaView style={styles.safeArea}>
         <ThemedView style={styles.headerContainer}>
           <ThemedView style={styles.textContainer}>
-            <ThemedText style={styles.header}>Good Evening, Kevin!</ThemedText>
-            <ThemedText style={styles.subheader}>Today's {new Date().toLocaleDateString()}</ThemedText>
+            <ThemedText style={styles.header}>{getGreeting()}, Kevin!</ThemedText>
+            <ThemedText style={styles.subheader}>{new Date().toLocaleDateString( 'en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' } )}</ThemedText>
           </ThemedView>
-          <Switch
-            trackColor={{false: '#767577', true: '#81b0ff'}}
-            thumbColor={reverse ? '#f5dd4b' : '#f4f3f4'}
-            ios_backgroundColor="#3e3e3e"
-            onValueChange={toggleReverse}
-            value={reverse}
-          />
+          <TouchableOpacity onPress={() => setReverse(prev =>!prev)}>
+            <MaterialDesignIcons name={reverse ? "sort-descending" : "sort-ascending"} size={24} color="#F1F5F9" style={styles.icon}/>
+          </TouchableOpacity>
         </ThemedView>
         <ScrollView
           style={styles.container}
@@ -69,13 +63,10 @@ export default function HomeScreen() {
         >
           {<UrgentTasks tasks={tasks} toggleTask={toggleTask} />}
 
-          {reverse ?
-          complexityOrder.reverse().map(complexity => (
-            <GeneralTasks key={complexity} tasks={tasks} complexity={complexity} toggleTask={toggleTask} />
-          )) :
-          complexityOrder.map(complexity => (
-            <GeneralTasks key={complexity} tasks={tasks} complexity={complexity} toggleTask={toggleTask} />
+          {displayedComplexityOrder.map(complexity => (
+            <GeneralTasks key={complexity} tasks={tasks} complexity={complexity} complexityOrder={displayedComplexityOrder} toggleTask={toggleTask} />
           ))}
+
         </ScrollView>
       </SafeAreaView>
     </ThemedView>
@@ -85,7 +76,7 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'transparent',
+    backgroundColor: 'black',
   },
 
   safeArea: {
@@ -110,15 +101,28 @@ const styles = StyleSheet.create({
   },
 
   header: {
+    color: '#F1F5F9',
+    // fontFamily: 'Outfit',
     fontSize: 28,
-    fontWeight: '700',
-    color: '#1C1C1E',
-    marginBottom: 6,
+    fontWeight: 700,
+    lineHeight: 33.6, /* 120% */
+    letterSpacing: -0.56,
   },
     
   subheader: {
-    fontSize: 16,
-    color: '#6E6E73',
-    marginBottom: 0,
+    color: '#94A3B8',
+    // fontFamily: 'Inter',
+    fontSize: 13,   
+    fontStyle: 'normal',
+    fontWeight: 400,
+    lineHeight: 19.5, /* 150% */
   },
+
+  icon: {
+    padding: 8,
+    borderRadius: 12,
+    borderWidth: 1.317,
+    backgroundColor: '#ffffff2f',
+    borderColor: '#ffffff85',
+  }
 })
