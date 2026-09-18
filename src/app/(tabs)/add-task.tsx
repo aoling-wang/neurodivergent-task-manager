@@ -1,12 +1,13 @@
+import { ThemedText } from '@/components/themed-text';
+import { ThemedView } from '@/components/themed-view';
 import { useState } from 'react';
 import {
-    Pressable,
-    ScrollView,
-    StyleSheet,
-    Switch,
-    Text,
-    TextInput,
-    View,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Switch,
+  TextInput,
+  View
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -72,146 +73,146 @@ export default function AddTaskScreen() {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-        <ScrollView
+      <ScrollView
         style={styles.container}
         contentContainerStyle={styles.contentContainer}
         keyboardShouldPersistTaps="handled"
+      >
+        <ThemedText style={styles.title}>Add Task</ThemedText>
+        <ThemedText style={styles.subtitle}>
+          Create a new task and set its priority.
+        </ThemedText>
+
+        {/* Title */}
+        <ThemedView style={styles.field}>
+          <ThemedText style={styles.label}>
+            Title <ThemedText style={styles.required}>*</ThemedText>
+          </ThemedText>
+
+          <TextInput
+            style={[
+                styles.input,
+                errors.title && styles.inputError,
+            ]}
+            value={title}
+            onChangeText={setTitle}
+            placeholder="Enter task title"
+            placeholderTextColor="#999"
+          />
+
+          {errors.title && (
+            <ThemedText style={styles.errorText}>{errors.title}</ThemedText>
+          )}
+        </ThemedView>
+
+        {/* Date */}
+        <ThemedView style={styles.field}>
+          <ThemedText style={styles.label}>
+            Date <ThemedText style={styles.required}>*</ThemedText>
+          </ThemedText>
+
+          <TextInput
+            style={[
+              styles.input,
+              errors.date && styles.inputError,
+            ]}
+            value={date}
+            onChangeText={setDate}
+            placeholder="YYYY-MM-DD"
+            placeholderTextColor="#999"
+            keyboardType="numbers-and-punctuation"
+          />
+
+          {errors.date && (
+            <ThemedText style={styles.errorText}>{errors.date}</ThemedText>
+          )}
+        </ThemedView>
+
+        {/* Estimated Minutes */}
+        <ThemedView style={styles.field}>
+          <ThemedText style={styles.label}>Estimated Minutes</ThemedText>
+
+          <TextInput
+            style={styles.input}
+            value={estimatedMinutes}
+            onChangeText={setEstimatedMinutes}
+            placeholder="e.g. 30"
+            placeholderTextColor="#999"
+            keyboardType="number-pad"
+          />
+        </ThemedView>
+
+        {/* Urgent */}
+        <ThemedView style={styles.field}>
+          <View style={styles.switchRow}>
+            <View style={styles.switchTextContainer}>
+              <ThemedText style={styles.label}>
+                Urgent
+              </ThemedText>
+
+              <ThemedText style={styles.helperText}>
+                Mark this task as a priority.
+              </ThemedText>
+            </View>
+
+            <Switch
+              value={urgent}
+              onValueChange={setUrgent}
+            />
+          </View>
+        </ThemedView>
+
+        {/* Complexity */}
+        <ThemedView style={styles.field}>
+          <ThemedText style={styles.label}>
+            Complexity <ThemedText style={styles.required}>*</ThemedText>
+          </ThemedText>
+
+          <View style={styles.complexityContainer}>
+            {(['Simple', 'Moderate', 'Complex'] as Complexity[]).map(
+              (option) => {
+                const selected = complexity === option;
+
+                return (
+                  <Pressable
+                    key={option}
+                    onPress={() => setComplexity(option)}
+                    style={[
+                      styles.complexityOption,
+                      selected && styles.complexityOptionSelected,
+                    ]}
+                  >
+                    <ThemedText
+                      style={[
+                        styles.complexityText,
+                        selected && styles.complexityTextSelected,
+                      ]}
+                    >
+                      {option}
+                    </ThemedText>
+                  </Pressable>
+                );
+              }
+            )}
+          </View>
+
+          {errors.complexity && (
+            <ThemedText style={styles.errorText}>
+              {errors.complexity}
+            </ThemedText>
+          )}
+        </ThemedView>
+
+        {/* Submit */}
+        <Pressable
+            style={styles.submitButton}
+            onPress={handleSubmit}
         >
-            <Text style={styles.title}>Add Task</Text>
-            <Text style={styles.subtitle}>
-                Create a new task and set its priority.
-            </Text>
-
-            {/* Title */}
-            <View style={styles.field}>
-                <Text style={styles.label}>
-                Title <Text style={styles.required}>*</Text>
-                </Text>
-
-                <TextInput
-                style={[
-                    styles.input,
-                    errors.title && styles.inputError,
-                ]}
-                value={title}
-                onChangeText={setTitle}
-                placeholder="Enter task title"
-                placeholderTextColor="#999"
-                />
-
-                {errors.title && (
-                <Text style={styles.errorText}>{errors.title}</Text>
-                )}
-            </View>
-
-            {/* Date */}
-            <View style={styles.field}>
-                <Text style={styles.label}>
-                Date <Text style={styles.required}>*</Text>
-                </Text>
-
-                <TextInput
-                style={[
-                    styles.input,
-                    errors.date && styles.inputError,
-                ]}
-                value={date}
-                onChangeText={setDate}
-                placeholder="YYYY-MM-DD"
-                placeholderTextColor="#999"
-                keyboardType="numbers-and-punctuation"
-                />
-
-                {errors.date && (
-                <Text style={styles.errorText}>{errors.date}</Text>
-                )}
-            </View>
-
-            {/* Estimated Minutes */}
-            <View style={styles.field}>
-                <Text style={styles.label}>Estimated Minutes</Text>
-
-                <TextInput
-                style={styles.input}
-                value={estimatedMinutes}
-                onChangeText={setEstimatedMinutes}
-                placeholder="e.g. 30"
-                placeholderTextColor="#999"
-                keyboardType="number-pad"
-                />
-            </View>
-
-            {/* Urgent */}
-            <View style={styles.field}>
-                <View style={styles.switchRow}>
-                <View style={styles.switchTextContainer}>
-                    <Text style={styles.label}>
-                    Urgent <Text style={styles.required}>*</Text>
-                    </Text>
-
-                    <Text style={styles.helperText}>
-                    Mark this task as a priority.
-                    </Text>
-                </View>
-
-                <Switch
-                    value={urgent}
-                    onValueChange={setUrgent}
-                />
-                </View>
-            </View>
-
-            {/* Complexity */}
-            <View style={styles.field}>
-                <Text style={styles.label}>
-                Complexity <Text style={styles.required}>*</Text>
-                </Text>
-
-                <View style={styles.complexityContainer}>
-                {(['Simple', 'Moderate', 'Complex'] as Complexity[]).map(
-                    (option) => {
-                    const selected = complexity === option;
-
-                    return (
-                        <Pressable
-                        key={option}
-                        onPress={() => setComplexity(option)}
-                        style={[
-                            styles.complexityOption,
-                            selected && styles.complexityOptionSelected,
-                        ]}
-                        >
-                        <Text
-                            style={[
-                            styles.complexityText,
-                            selected && styles.complexityTextSelected,
-                            ]}
-                        >
-                            {option}
-                        </Text>
-                        </Pressable>
-                    );
-                    }
-                )}
-                </View>
-
-                {errors.complexity && (
-                <Text style={styles.errorText}>
-                    {errors.complexity}
-                </Text>
-                )}
-            </View>
-
-            {/* Submit */}
-            <Pressable
-                style={styles.submitButton}
-                onPress={handleSubmit}
-            >
-                <Text style={styles.submitButtonText}>
-                Add Task
-                </Text>
-            </Pressable>
-        </ScrollView>
+          <ThemedText style={styles.submitButtonText}>
+            Add Task
+          </ThemedText>
+        </Pressable>
+      </ScrollView>
     </SafeAreaView>
   );
 }
@@ -219,7 +220,7 @@ export default function AddTaskScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F7F7F8',
+    backgroundColor: 'transparent',
   },
 
   contentContainer: {
@@ -229,29 +230,37 @@ const styles = StyleSheet.create({
 
   safeArea: {
     flex: 1,
+    backgroundColor: '#000000',
   },
 
   title: {
+    color: '#F1F5F9',
+    // fontFamily: 'Outfit',
     fontSize: 28,
-    fontWeight: '700',
-    color: '#1C1C1E',
-    marginBottom: 6,
+    fontWeight: 700,
+    lineHeight: 33.6, /* 120% */
+    letterSpacing: -0.56,
   },
 
   subtitle: {
-    fontSize: 16,
-    color: '#6E6E73',
-    marginBottom: 32,
+    color: '#94A3B8',
+    // fontFamily: 'Inter',
+    fontSize: 13,   
+    fontStyle: 'normal',
+    fontWeight: 400,
+    lineHeight: 19.5, /* 150% */
+    marginBottom: 24,
   },
 
   field: {
     marginBottom: 24,
+    backgroundColor: 'transparent',
   },
 
   label: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#1C1C1E',
+    color: '#F1F5F9',
     marginBottom: 8,
   },
 
