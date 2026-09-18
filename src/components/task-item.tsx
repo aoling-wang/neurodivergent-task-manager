@@ -1,24 +1,49 @@
-import { Task } from '@/app/(tabs)/index';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { Task } from '@/constants/types';
 import { FontAwesome } from '@react-native-vector-icons/fontawesome';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 
-const complexityTagColors: Record<string, string> = {
-    simple: '#569139', // dark green
-    moderate: '#d0c060', // dark khaki
-    complex: '#d06060', // dark coral
+const tagColors: Record<string, string> = {
+    'urgent': '#f43f5e',
+    'simple': '#2DD4BF',
+    'moderate': '#F59E0B',
+    'complex': '#8B5CF6',
 };
 
-export default function TaskItem({ task, toggleTask }: { task: Task; toggleTask: (id: number) => void }) {
+export default function TaskItem({ task, unlock, toggleTask }: { task: Task; unlock: boolean; toggleTask: (id: number) => void }) {
     return (
         <TouchableOpacity onPress={() => toggleTask(task.id)}>
             <ThemedView style={styles.taskContainer}>
                 {task.completed ? 
-                <FontAwesome name="check-square" size={22} color="black" style={styles.icon}/> : 
-                <FontAwesome name="square-o" size={24} color="black" style={styles.icon}/>}
-                <ThemedText style={styles.title}>{task.title}</ThemedText>
-                <ThemedText style={styles.tag}>{task.estimatedMinutes} min</ThemedText>
+                <FontAwesome name="check-square" size={14} color="#696969a8"/> : 
+                <FontAwesome name="square-o" size={16} color="#858585e1"/>}
+                <ThemedText style={[styles.title, task.completed && styles.strikethrough]}>{task.title}</ThemedText>
+
+                <ThemedText style={[styles.tag, task.urgent ?
+                    (!task.completed ? {
+                            color: tagColors['urgent'],
+                            backgroundColor: tagColors['urgent'] + '1f',
+                            borderColor: tagColors['urgent']
+                        } :
+                        {
+                            color: tagColors['urgent'] + '25',
+                            backgroundColor: tagColors['urgent'] + '1f',
+                            borderColor: tagColors['urgent'] + '25'
+                        }) :
+                    (!task.completed && unlock ? {
+                        color: tagColors[task.complexity],
+                        backgroundColor: tagColors[task.complexity] + '1f',
+                        borderColor: tagColors[task.complexity]
+                    } :
+                    {
+                        color: tagColors[task.complexity] + '25',
+                        backgroundColor: tagColors[task.complexity] + '1f',
+                        borderColor: tagColors[task.complexity] + '25'
+                    })
+                ]}>
+                    {task.estimatedMinutes} min
+                </ThemedText>
             </ThemedView>
         </TouchableOpacity>
     );
@@ -26,27 +51,41 @@ export default function TaskItem({ task, toggleTask }: { task: Task; toggleTask:
 
 const styles = StyleSheet.create({
     taskContainer: {
-        flexDirection: 'row',
+        display: 'flex',
+        paddingVertical: 5,
+        paddingHorizontal: 8,
         alignItems: 'center',
+        flexDirection: 'row',
         gap: 10,
-        paddingVertical: 2,
-        backgroundColor: 'transparent',
-    },
-
-    icon: {
-        backgroundColor: 'white',
+        borderRadius: 10,
+        borderWidth: 1.317,
+        borderColor: '#ffffff0d',
+        backgroundColor: '#ffffff08',
     },
 
     title: {
-        fontWeight: '400',
+        color: '#F1F5F9',
+        // fontFamily: 'Inter',
+        fontSize: 13,
+        fontStyle: 'normal',
+        fontWeight: 400,
+        marginRight: 'auto',
+    },
+
+    strikethrough: {
+        textDecorationLine: 'line-through',
+        color: '#858585e1',
     },
 
     tag: {
-        marginLeft: 'auto',
-        fontSize: 12,
+        display: 'flex',
         paddingHorizontal: 8,
-        paddingVertical: 0,
-        borderRadius: 12,
-        backgroundColor: '#e0e0e0',
+        flexDirection: 'column',
+        borderRadius: 100,
+        borderWidth: 1.317,
+        fontFamily: 'Inter',
+        fontSize: 10,
+        fontStyle: 'normal',
+        fontWeight: 600,
     },
 })
