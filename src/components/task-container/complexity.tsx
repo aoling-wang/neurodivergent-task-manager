@@ -34,6 +34,8 @@ export default function GeneralTasks({ tasks, complexity, complexityOrder, toggl
         return (previousTasks.length > 0 && previousTasks.every((task) => task.completed));
     };
 
+    const isCompleted = filteredTasks.every(task => task.completed)
+
     const calculateTime = (mins: number): string => {
         if (mins < 60) {
             return `${mins}m`
@@ -50,7 +52,7 @@ export default function GeneralTasks({ tasks, complexity, complexityOrder, toggl
     return ( 
         <ThemedView style={[
             styles.container, 
-            isComplexityUnlocked(complexity) ? 
+            isComplexityUnlocked(complexity) && !isCompleted ? 
             {
                 backgroundColor: complexityColors[complexity] + '1a',
                 borderColor: '#F1F5F9'
@@ -62,10 +64,10 @@ export default function GeneralTasks({ tasks, complexity, complexityOrder, toggl
             ]}>
             <ThemedView style={styles.headerContainer}>
                 <ThemedText style={[styles.header,
-                    isComplexityUnlocked(complexity) ? {color: complexityColors[complexity]} : {color: complexityColors[complexity] + '25'}
+                    isComplexityUnlocked(complexity) && !isCompleted ? {color: complexityColors[complexity]} : {color: complexityColors[complexity] + '25'}
                 ]}>{capitalize(complexity)}</ThemedText>
                 <ThemedText style={[styles.tag,
-                    isComplexityUnlocked(complexity) ?
+                    isComplexityUnlocked(complexity) && !isCompleted ?
                     {
                         color: complexityColors[complexity],
                         backgroundColor: complexityColors[complexity] + '40',
@@ -98,7 +100,6 @@ const styles = StyleSheet.create({
         alignSelf: 'stretch',
         borderRadius: 16,
         borderWidth: 1.317,
-
         marginBottom: 16,
     },
 
