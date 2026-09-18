@@ -16,9 +16,9 @@ export default function TaskItem({ task, unlock, toggleTask }: { task: Task; unl
         <TouchableOpacity onPress={() => toggleTask(task.id)}>
             <ThemedView style={styles.taskContainer}>
                 {task.completed ? 
-                <FontAwesome name="check-square" size={14} color="#696969a8"/> : 
-                <FontAwesome name="square-o" size={16} color="#858585e1"/>}
-                <ThemedText style={[styles.title, task.completed && styles.strikethrough]}>{task.title}</ThemedText>
+                <FontAwesome name="check-square" size={14} color="#4b4b4ba8"/> : 
+                <FontAwesome name="square-o" size={16} color={!unlock && !task.urgent ? "#4b4b4ba8" : "#858585e1"}/>}
+                <ThemedText style={[styles.title, task.completed && styles.strikethrough, !unlock && styles.locked]}>{task.title}</ThemedText>
 
                 <ThemedText style={[styles.tag, task.urgent ?
                     (!task.completed ? {
@@ -70,6 +70,10 @@ const styles = StyleSheet.create({
         fontStyle: 'normal',
         fontWeight: 400,
         marginRight: 'auto',
+    },
+
+    locked: {
+        color: '#858585e1',
     },
 
     strikethrough: {
