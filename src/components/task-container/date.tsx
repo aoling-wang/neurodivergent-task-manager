@@ -1,9 +1,19 @@
-import { format, getDate } from 'date-fns';
+import { addDays, format } from 'date-fns';
 
-import { Task } from '@/app/(tabs)/index';
+import { Task } from '@/constants/types';
 import { FlatList, StyleSheet } from 'react-native';
 import { ThemedText } from '../themed-text';
 import { ThemedView } from '../themed-view';
+
+const colors: { [key: string]: string } = {
+    'monday': '#08b18c',
+    'tuesday': '#9f2dd4',
+    'wednesday': '#a6f65c',
+    'thursday': '#f43f66',
+    'friday': '#f5f10b',
+    'saturday': '#2d54d4',
+    'sunday': '#eb8f06',
+}
 
 export default function PriorityTaskCard({
   date,
@@ -18,8 +28,14 @@ export default function PriorityTaskCard({
 
   return (
     <ThemedView style={styles.card}>
-      <ThemedText style={styles.date}>{format(date, 'eee') + ' ' + getDate(date)}</ThemedText>
-
+      <ThemedView style={[styles.dateContainer, { backgroundColor: colors[format(date, 'eeee').toLowerCase()] + '1f' }]}>
+        <ThemedText style={[styles.day, {
+          color: colors[format(date, 'eeee').toLowerCase()]
+        }]}>{format(date, 'eee')}</ThemedText>
+        <ThemedText style={styles.date}>
+          {format(addDays(date, 1), 'MMM dd')}
+        </ThemedText>
+      </ThemedView>
       <ThemedView style={styles.taskContainer}>
         {filteredTasks.length > 0 ? (
           <FlatList
@@ -45,43 +61,46 @@ export default function PriorityTaskCard({
 const styles = StyleSheet.create({
   card: {
     flex: 1,
-    minHeight: 160,
-    padding: 12,
-    borderRadius: 18,
+    minHeight: 200,
+    borderRadius: 12,
     borderWidth: 1.5,
-    borderColor: '#4A4A4A',
+    borderColor: '#f1f5f9a6',
+    backgroundColor: '#ffffff10',
 
-    // Default surface
-    backgroundColor: '#FFFFFF',
+  },
 
-    // Subtle card shadow
-    shadowColor: '#000000',
-    shadowOffset: {
-        width: 0,
-        height: 4,
-    },
-    shadowOpacity: 0.14,
-    shadowRadius: 10,
+  dateContainer: {
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
+    paddingTop: 8,
+    paddingBottom: 4,
+    paddingHorizontal: 12,
+  },
 
-    // Android shadow
-    elevation: 5,
-    gap: 8,
+  day: {
+    fontSize: 14,
+    fontWeight: '700',
   },
 
   date: {
-    fontSize: 14,
-    fontWeight: '700',
+    fontSize: 12,
+    fontWeight: '500',
+    color: '#ffffff8c'
   },
 
   taskContainer: {
     flex: 1,
     gap: 6,
+    backgroundColor: 'transparent',
+    padding: 12,
   },
 
   task: {
-    fontSize: 13,
-    lineHeight: 18,
-    marginBottom: 6,
+    color: '#94A3B8',
+    fontFamily: 'Inter',
+    fontSize: 12,
+    fontWeight: 500,
+    lineHeight: 13.5,
   },
 
   emptyText: {
@@ -89,5 +108,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 12,
     opacity: 0.6,
+    color: '#54657c',
   },
 });
