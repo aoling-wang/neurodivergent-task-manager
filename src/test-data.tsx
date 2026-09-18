@@ -1,4 +1,4 @@
-import { Task } from "@/app/(tabs)/index";
+import { Task } from "@/constants/types";
 
 export const TestTasks: Task[] = [
   {
@@ -8,7 +8,7 @@ export const TestTasks: Task[] = [
     complexity: "simple",
     urgent: true,
     completed: false,
-    date: "2026-08-27",
+    date: "2026-09-17",
   },
   {
     id: 2,
@@ -17,7 +17,7 @@ export const TestTasks: Task[] = [
     complexity: "simple",
     urgent: false,
     completed: false,
-    date: "2026-08-27",
+    date: "2026-09-17",
   },
   {
     id: 3,
@@ -26,7 +26,7 @@ export const TestTasks: Task[] = [
     complexity: "simple",
     urgent: false,
     completed: false,
-    date: "2026-08-27",
+    date: "2026-09-17",
   },
   {
     id: 4,
@@ -35,7 +35,7 @@ export const TestTasks: Task[] = [
     complexity: "moderate",
     urgent: false,
     completed: false,
-    date: "2026-08-27",
+    date: "2026-09-17",
   },
   {
     id: 5,
@@ -44,7 +44,7 @@ export const TestTasks: Task[] = [
     complexity: "moderate",
     urgent: false,
     completed: false,
-    date: "2026-08-27",
+    date: "2026-09-17",
   },
   {
     id: 6,
@@ -53,7 +53,7 @@ export const TestTasks: Task[] = [
     complexity: "complex",
     urgent: false,
     completed: false,
-    date: "2026-08-27",
+    date: "2026-09-17",
   },
   {
     id: 7,
@@ -62,6 +62,6 @@ export const TestTasks: Task[] = [
     complexity: "complex",
     urgent: false,
     completed: false,
-    date: "2026-08-27",
+    date: "2026-09-17",
   },
 ];
