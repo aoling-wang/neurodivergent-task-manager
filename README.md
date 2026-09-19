@@ -37,7 +37,8 @@ As users complete all tasks in a given box, the app will unlock and highlight ne
 Please see demo video below:
 
 <p align='center'>
-<video alt="Home Screen Demo" src='https://github.com/user-attachments/assets/e9738cf4-ea82-4f29-817f-645f37d95766' autoplay loop muted playsinline height="600"/>
+  <img height="600" alt="Checklist Demo" src="https://github.com/user-attachments/assets/0a58fe83-dc13-4d06-9f0e-59cfaac1d2fd" />
+  <img height="600" alt="Form Demo" src="https://github.com/user-attachments/assets/070ff3b2-afea-4ed2-81da-b6de2c7bbc8e" />
 </p>
   
 Although this application is very simple, I utilizes <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC10159421/">productivity research</a> by Elijah Myers, Erin T. Drees, and Jeff Cain to help users focus on the immediate next step. 
