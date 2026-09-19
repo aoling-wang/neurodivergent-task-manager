@@ -35,8 +35,8 @@ Drawing on my own experiences as an individual with diagnosed ADHD, I built the 
 As users complete all tasks in a given box, the app will unlock and highlight new boxes of increasing complexity. This system keeps focus on a small set of tasks and avoids overwhelming users with decision paralysis if too many tasks grab their attetnion at once. 
 
 <p align="center">
-  <video height="600" alt="Home Screen Demo" src='https://github.com/user-attachments/assets/e9738cf4-ea82-4f29-817f-645f37d95766'/>
-  <video height="600" alt="Task Form Demo" src='https://github.com/user-attachments/assets/f799131e-6718-4c41-b7c3-50df26ddedab'/>
+  <video autoplay loop muted playsinline height="600" alt="Home Screen Demo" src='https://github.com/user-attachments/assets/e9738cf4-ea82-4f29-817f-645f37d95766'/>
+  <video autoplay loop muted playsinline height="600" alt="Task Form Demo" src='https://github.com/user-attachments/assets/f799131e-6718-4c41-b7c3-50df26ddedab'/>
 </p>
 
 Although this application is very simple, I utilizes <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC10159421/">productivity research</a> by Elijah Myers, Erin T. Drees, and Jeff Cain to help users focus on the immediate next step. 
