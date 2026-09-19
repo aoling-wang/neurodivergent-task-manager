@@ -36,8 +36,10 @@ As users complete all tasks in a given box, the app will unlock and highlight ne
 
 Please see demo video below:
 
+<p align='center'>
 <video alt="Home Screen Demo" src='https://github.com/user-attachments/assets/e9738cf4-ea82-4f29-817f-645f37d95766' autoplay loop muted playsinline height="600"/>
-
+</p>
+  
 Although this application is very simple, I utilizes <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC10159421/">productivity research</a> by Elijah Myers, Erin T. Drees, and Jeff Cain to help users focus on the immediate next step. 
 
 ## BTS: MMKV 4.0 and Device Local Storage
