@@ -34,9 +34,7 @@ Drawing on my own experiences as an individual with diagnosed ADHD, I built the 
 
 As users complete all tasks in a given box, the app will unlock and highlight new boxes of increasing complexity. This system keeps focus on a small set of tasks and avoids overwhelming users with decision paralysis if too many tasks grab their attetnion at once. 
 
-Please see demo video below:
-
-<p align='center'>
+<p align='center' gap=40px>
   <img height="600" alt="Checklist Demo" src="https://github.com/user-attachments/assets/0a58fe83-dc13-4d06-9f0e-59cfaac1d2fd" />
   <img height="600" alt="Form Demo" src="https://github.com/user-attachments/assets/070ff3b2-afea-4ed2-81da-b6de2c7bbc8e" />
 </p>
