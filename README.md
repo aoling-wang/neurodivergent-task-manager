@@ -11,7 +11,9 @@
 **Sisyphus** is a small frontend productivity application built using **React Native and Expo Go** that attempts to solve the issue of attention dysregulation in individuals with neurodivergents using color psychology, saturation, and simple design.
 
 <p align="center">
-  <img width="655" height="400" alt="image" src="https://github.com/user-attachments/assets/520a35a7-2c76-4826-b62c-2f8e458c3cea" />
+  <img width="288 " height="600" alt="Calendar Screen" src="https://github.com/user-attachments/assets/4d65dc17-00de-4077-a9e3-2760736cc9b0" />
+  <img width="286 " height="600" alt="Home Screen" src="https://github.com/user-attachments/assets/87086499-a07c-4eb7-9c3c-9fbb6a4abba8" />
+  <img width="287 " height="600" alt="Task Form Screen" src="https://github.com/user-attachments/assets/e6e98cfe-b806-474f-8c5c-13218b2e75e9" />
 </p>
 
 ## Overview
@@ -33,7 +35,8 @@ Drawing on my own experiences as an individual with diagnosed ADHD, I built the 
 As users complete all tasks in a given box, the app will unlock and highlight new boxes of increasing complexity. This system keeps focus on a small set of tasks and avoids overwhelming users with decision paralysis if too many tasks grab their attetnion at once. 
 
 <p align="center">
-  <img width="655" height="400" alt="image" src="https://github.com/user-attachments/assets/520a35a7-2c76-4826-b62c-2f8e458c3cea" />
+  <video height="600" alt="Home Screen Demo" src='https://github.com/user-attachments/assets/e9738cf4-ea82-4f29-817f-645f37d95766'/>
+  <video height="600" alt="Task Form Demo" src='https://github.com/user-attachments/assets/f799131e-6718-4c41-b7c3-50df26ddedab'/>
 </p>
 
 Although this application is very simple, I utilizes <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC10159421/">productivity research</a> by Elijah Myers, Erin T. Drees, and Jeff Cain to help users focus on the immediate next step. 
