@@ -5,7 +5,7 @@ import { FlatList, StyleSheet } from 'react-native';
 import { ThemedText } from '../themed-text';
 import { ThemedView } from '../themed-view';
 
-const colors: { [key: string]: string } = {
+const dayColors: { [key: string]: string } = {
     'monday': '#08b18c',
     'tuesday': '#9f2dd4',
     'wednesday': '#a6f65c',
@@ -15,48 +15,42 @@ const colors: { [key: string]: string } = {
     'sunday': '#eb8f06',
 }
 
-export default function PriorityTaskCard({
-  date,
-  tasks,
-}: {
-  date: string;
-  tasks: Task[];
-}) {
-  const filteredTasks = tasks.filter(
-    (task) => task.urgent && task.date === date
-  );
+export default function PriorityTaskCard({ date, tasks }: { date: string; tasks: Task[] }) {
+  const filteredTasks = tasks.filter( task => task.urgent && task.date === date );
 
   return (
     <ThemedView style={styles.card}>
-      <ThemedView style={[styles.dateContainer, { backgroundColor: colors[format(date, 'eeee').toLowerCase()] + '1f' }]}>
-        <ThemedText style={[styles.day, {
-          color: colors[format(date, 'eeee').toLowerCase()]
-        }]}>{format(date, 'eee')}</ThemedText>
+      <ThemedView style={[styles.dateContainer, { backgroundColor: dayColors[format(date, 'eeee').toLowerCase()] + '1f' }]}>
+        <ThemedText style={[styles.day, {color: dayColors[format(date, 'eeee').toLowerCase()]}]}>
+          {format(date, 'eee')}
+        </ThemedText>
         <ThemedText style={styles.date}>
           {format(addDays(date, 1), 'MMM dd')}
         </ThemedText>
       </ThemedView>
       <ThemedView style={styles.taskContainer}>
-        {filteredTasks.length > 0 ? (
+
+        {/* Renders priority tasks cards for each day of the week or shows a message if there are no priority tasks */}
+
+        {filteredTasks.length > 0 ? 
+        (
           <FlatList
             data={filteredTasks}
-            renderItem={({ item }) => (
-              <ThemedText style={styles.task}>
-                {item.title}
-              </ThemedText>
-            )}
+            renderItem={ ({ item }) => <ThemedText style={styles.task}>{item.title}</ThemedText> }
             keyExtractor={(item) => item.id.toString()}
             showsVerticalScrollIndicator={false}
           />
-        ) : (
-          <ThemedText style={styles.emptyText}>
-            No Priority Tasks
-          </ThemedText>
+        ) : 
+        (
+          <ThemedText style={styles.emptyText}>No Priority Tasks</ThemedText>
         )}
+
       </ThemedView>
     </ThemedView>
   );
 }
+
+// Styling
 
 const styles = StyleSheet.create({
   card: {

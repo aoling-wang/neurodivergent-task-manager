@@ -1,6 +1,6 @@
-export type Complexity = "simple" | "moderate" | "complex";
+export type Complexity = "Simple" | "Moderate" | "Complex";
 
-export const complexityOrder: Complexity[] = ["simple", "moderate", "complex"];
+export const complexityOrder: Complexity[] = ["Simple", "Moderate", "Complex"];
 
 export type Task = {
   id: number;
@@ -11,3 +11,9 @@ export type Task = {
   urgent: boolean;
   completed: boolean;
 };
+
+export type Error = {
+    title?: string;
+    date?: string;
+    complexity?: string;
+  }

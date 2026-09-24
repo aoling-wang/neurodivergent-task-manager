@@ -11,9 +11,17 @@ import { complexityOrder, type Task } from '@/constants/types';
 
 import { TestTasks } from '@/test-data';
 
+// import { createMMKV } from 'react-native-mmkv';    (Not supported in Expo Go)
 
+// const storage = createMMKV({     
+//   id: 'tasksStorage',             (Storage initailation if not exists and connection initailization)
+// });
 
-function getGreeting(): string {
+export const [tasks, setTasks] = useState<Task[]>(TestTasks);
+
+//Get Greeting based on time of day
+
+const getGreeting = (): string => {
   const hour = new Date().getHours();
   if (hour < 12) {
     return "Good Morning";
@@ -24,11 +32,21 @@ function getGreeting(): string {
   return "Good Evening";
 }
 
+// Component Initialization
+
 export default function HomeScreen() {
-  const [tasks, setTasks] = useState<Task[]>(TestTasks);
   const [reverse, setReverse] = useState(false);
 
+  //Create derived state for complexity order
+
   const displayedComplexityOrder = reverse ? [...complexityOrder].reverse() : complexityOrder;
+
+  //Load tasks from MMKV storage on component mount (Not supported in Expo Go)
+
+  // const savedTasks = JSON.parse(storage.getString('tasksStorage') || '[]');
+  // setTasks(savedTasks.length > 0 ? savedTasks : TestTasks);
+
+  //Toggle task completion and deletion
 
   const toggleTask = (id: number) => {
     setTasks(tasks.map(
@@ -42,8 +60,10 @@ export default function HomeScreen() {
 
   const deleteTask = (id: number) => {
     setTasks(tasks.filter((task) => task.id !== id));
-    // storage.set('tasksStorage', JSON.stringify(newTasks));
+    // storage.set('tasksStorage', JSON.stringify(tasks));
   };
+
+  //Element for rendering
 
   return (
     <ThemedView style={styles.container}>
@@ -57,11 +77,11 @@ export default function HomeScreen() {
             <MaterialDesignIcons name={reverse ? "sort-descending" : "sort-ascending"} size={24} color="#F1F5F9" style={styles.icon}/>
           </TouchableOpacity>
         </ThemedView>
-        <ScrollView
-          style={styles.container}
-          showsVerticalScrollIndicator={false}
-        >
+        <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+
           {<UrgentTasks tasks={tasks} toggleTask={toggleTask} />}
+
+          // Generate task boxes by order of complexity
 
           {displayedComplexityOrder.map(complexity => (
             <GeneralTasks key={complexity} tasks={tasks} complexity={complexity} complexityOrder={displayedComplexityOrder} toggleTask={toggleTask} />
@@ -72,6 +92,8 @@ export default function HomeScreen() {
     </ThemedView>
   );
 }
+
+//Styling
 
 const styles = StyleSheet.create({
   container: {

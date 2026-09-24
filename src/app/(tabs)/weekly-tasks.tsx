@@ -5,10 +5,12 @@ import PriorityTaskCard from '@/components/task-container/date';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 
-import { TestTasks } from '@/test-data';
+import { tasks } from '@/app/(tabs)/index';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function WeekScreen() {
+
+    // Creating an array of display dates for the card components
 
     const getFormattedWeekDays = () => {
         const today = new Date();
@@ -32,7 +34,7 @@ export default function WeekScreen() {
                 renderItem={({ item }) => (
                     <PriorityTaskCard
                         date={item}
-                        tasks={TestTasks}
+                        tasks={tasks}
                     />
                 )}
                 columnWrapperStyle={styles.row}

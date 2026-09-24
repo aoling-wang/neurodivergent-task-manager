@@ -1,39 +1,31 @@
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { useState } from 'react';
-import {
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Switch,
-  TextInput,
-  View
-} from 'react-native';
+import { Redirect } from 'expo-router';
+import { useRef, useState } from 'react';
+import { Pressable, ScrollView, StyleSheet, Switch, TextInput, View } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-type Complexity = 'Simple' | 'Moderate' | 'Complex';
-
-type Task = {
-  title: string;
-  date: string;
-  estimatedMinutes?: number;
-  urgent: boolean;
-  complexity: Complexity;
-};
+import { setTasks } from '@/app/(tabs)/index';
+import { ThemedText } from '@/components/themed-text';
+import { ThemedView } from '@/components/themed-view';
+import { Complexity, Error, Task } from '@/constants/types';
 
 export default function AddTaskScreen() {
+
+  // State management for inputs and errors
+
   const [title, setTitle] = useState('');
   const [date, setDate] = useState('');
   const [estimatedMinutes, setEstimatedMinutes] = useState('');
   const [urgent, setUrgent] = useState(false);
   const [complexity, setComplexity] = useState<Complexity | null>(null);
 
-  const [errors, setErrors] = useState<{
-    title?: string;
-    date?: string;
-    complexity?: string;
-  }>({});
+  const [errors, setErrors] = useState<Error>({});
+
+  // Ref for task id counter
+
+  const taskIdCounter = useRef(1);
+
+  // Error formatting or submission processing if no errors are found
 
   const handleSubmit = () => {
     const newErrors: typeof errors = {};
@@ -57,19 +49,31 @@ export default function AddTaskScreen() {
     }
 
     const task: Task = {
+      id: taskIdCounter.current,
       title: title.trim(),
       date: date.trim(),
-      estimatedMinutes: estimatedMinutes
-        ? Number(estimatedMinutes)
-        : undefined,
+      estimatedMinutes: estimatedMinutes ? Number(estimatedMinutes) : 15,
       urgent,
       complexity: complexity as Complexity,
+      completed: false
     };
 
-    console.log('New Task:', task);
+    setTasks(prevTasks => [...prevTasks, task]);
 
-    // TODO:
-    // Add your task creation / navigation logic here.
+    // Increment the task ID counter for the next task
+
+    taskIdCounter.current += 1;
+
+    // Reset the form fields after submission
+
+    setTitle('');
+    setDate('');
+    setEstimatedMinutes('');
+    setUrgent(false);
+    setComplexity(null);
+    setErrors({});
+    
+    return <Redirect href='/' />;
   };
 
   return (

@@ -7,6 +7,8 @@ import { StyleSheet } from 'react-native';
 export default function UrgentTasks({ tasks, toggleTask }: { tasks: Task[]; toggleTask: (id: number) => void }) {
     const filteredTasks = tasks.filter((task) => task.urgent);
 
+    // Converts total estimated minutes into an hours and minutes format
+
     function calculateTime(mins: number): string {
         if (mins < 60) {
             return `${mins}m`
@@ -20,6 +22,8 @@ export default function UrgentTasks({ tasks, toggleTask }: { tasks: Task[]; togg
 
     const totalEstimatedTime = calculateTime(filteredTasks.reduce((total, task) => total + task.estimatedMinutes, 0));
 
+    // Component initialization and rendering
+
     return (
         <ThemedView style={styles.container}>
             <ThemedView style={styles.headerContainer}>
@@ -32,6 +36,8 @@ export default function UrgentTasks({ tasks, toggleTask }: { tasks: Task[]; togg
         </ThemedView>
     );
 }
+
+// Styling
 
 const styles = StyleSheet.create({
     container: {

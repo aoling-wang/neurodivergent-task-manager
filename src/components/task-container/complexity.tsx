@@ -6,9 +6,9 @@ import { ThemedView } from '@/components/themed-view';
 import { Complexity, Task } from '@/constants/types';
 
 const complexityColors: Record<Complexity, string> = {
-    'simple': '#2DD4BF',
-    'moderate': '#F59E0B',
-    'complex': '#8B5CF6',
+    'Simple': '#2DD4BF',
+    'Moderate': '#F59E0B',
+    'Complex': '#8B5CF6',
 };
 
 function capitalize(str: string) {
@@ -18,36 +18,39 @@ function capitalize(str: string) {
 export default function GeneralTasks({ tasks, complexity, complexityOrder, toggleTask }: { tasks: Task[]; complexity: Complexity; complexityOrder: Complexity[]; toggleTask: (id: number) => void }) {
     const filteredTasks = tasks.filter((task) => task.complexity === complexity && !task.urgent);
 
+    // Check if the current complexity level is unlocked based on the completion of the previous level
+
     const isComplexityUnlocked = (complexity: Complexity) => {
         const index = complexityOrder.indexOf(complexity);
 
         if (index === 0) {
-        return true;
+            return true;
         }
 
         const previousComplexity = complexityOrder[index - 1];
+        const previousTasks = tasks.filter(task => task.complexity === previousComplexity && !task.urgent);
 
-        const previousTasks = tasks.filter(
-        (task) => task.complexity === previousComplexity && !task.urgent
-        );
-
-        return (previousTasks.length > 0 && previousTasks.every((task) => task.completed));
+        return (previousTasks.length > 0 && previousTasks.every(task => task.completed));
     };
 
     const isCompleted = filteredTasks.every(task => task.completed)
+
+    // Converts total estimated minutes into an hours and minutes format
 
     const calculateTime = (mins: number): string => {
         if (mins < 60) {
             return `${mins}m`
         };
 
-        const h = Math.floor(mins / 60);
-        const m = mins % 60;
+        const hour = Math.floor(mins / 60);
+        const min = mins % 60;
         
-        return m ? `${h}h ${m}m` : `${h}h`;
+        return min ? `${hour}h ${min}m` : `${hour}h`;
         }
 
     const totalEstimatedTime = calculateTime(filteredTasks.reduce((total, task) => total + task.estimatedMinutes, 0));
+
+    // Component initialization
 
     return ( 
         <ThemedView style={[
@@ -90,6 +93,8 @@ export default function GeneralTasks({ tasks, complexity, complexityOrder, toggl
         </ThemedView>
     );
 }
+
+// Styling
 
 const styles = StyleSheet.create({
     container: {

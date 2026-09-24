@@ -49,6 +49,8 @@ export default function TaskItem({ task, unlock, toggleTask }: { task: Task; unl
     );
 }
 
+// Styling
+
 const styles = StyleSheet.create({
     taskContainer: {
         display: 'flex',
